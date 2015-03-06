@@ -147,7 +147,7 @@ def nnObjFunction():
    	train_temp = training_label[:,:n_class]
    	sigma_output = np.dot((output_value-train_temp),w2)
  	#sigma_output = np.dot(w2,(output_value-training_label))
-   	'''
+
    	for k in range(np.shape(training_data)[0]):
             for j in range(n_hidden):
                 for i in range(n_input):
@@ -160,16 +160,18 @@ def nnObjFunction():
    	print (sigma_output)
    	print ("hello")  
    	print (training_data)
-   	  	   	
+   		
    	for i in range(np.shape(training_data)[0]):
-   	   	temp1 = np.dot((1-hidden_value[i]),hidden_value[i].T)
-   	   	temp2 = np.dot(temp1, sigma_output[i])
-   	   	hidden_err[i] += np.dot(temp2, training_data)
-   	
+   	   	for j in range(n_hidden):
+    	  	   	temp1 = np.dot((1-hidden_value[j]),hidden_value[j].T)
+  		   	temp2 = np.dot(temp1, sigma_output[j])
+           	   	hidden_err[i] = np.dot(temp2, training_data[j])
+   	'''
+
    	for k in range(np.shape(training_data)[0]):
    	   	for j in range(n_hidden):
    	   	   	hidden_err[k][j][n_input] = (1 - hidden_value[k][j]) * hidden_value[k][j] * sigma_output[k][j] * 1
-        
+    
    	grad_output = np.zeros((n_class,n_hidden+1))
    	''' 
    	for k in range(np.shape(training_label)[0]):
