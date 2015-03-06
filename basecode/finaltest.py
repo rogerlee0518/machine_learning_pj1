@@ -133,11 +133,14 @@ def nnObjFunction():
 	# Now compute the derivative of err function from input unit to output
 	hidden_err = np.zeros((np.shape(training_data)[0],n_hidden,n_input+1))
 	
-	sigma_output = np.zeros((np.shape(training_label)[0],n_hidden))
+	'''sigma_output = np.zeros((np.shape(training_label)[0],n_hidden))
 	for k in range(np.shape(training_label)[0]):
 		for l in range(0,n_class):
 			for j in range(0,n_hidden):
-				sigma_output[k][j] += w2[l][j] * (output_value[k][l] - training_label[k][l])
+				sigma_output[k][j] += w2[l][j] * (output_value[k][l] - training_label[k][l])'''
+				
+	train_temp = training_label[:n_class,:n_class]
+   	sigma_output = np.dot((output_value-train_temp),w2)
 
 	for k in range(np.shape(training_data)[0]):
 		for j in range(n_hidden):
