@@ -10,7 +10,6 @@ def initializeWeights(n_in,n_out):
 	"""
 	# initializeWeights return the random weights for Neural Network given the
 	# number of node in the input layer and output layer
-
 	# Input:
 	# n_in: number of nodes of the input layer
 	# n_out: number of nodes of the output layer
@@ -37,7 +36,6 @@ def preprocess():
 	""" Input:
 	Although this function doesn't have any input, you are required to load
 	the MNIST data set from file 'mnist_all.mat'.
-
 	Output:
 	train_data: matrix of training set. Each row of train_data contains 
 	feature vector of a image
@@ -51,7 +49,6 @@ def preprocess():
 	feature vector of a image
 	test_label: vector of label corresponding to each image in the testing
 	set
-
 	Some suggestions for preprocessing step:
 	- divide the original data set to training, validation and testing set
 	with corresponding labels
@@ -120,7 +117,6 @@ def nnObjFunction(params, *args):
 	%   likelihood error function with regularization) given the parameters 
 	%   of Neural Networks, thetraining data, their corresponding training 
 	%   labels and lambda - regularization hyper-parameter.
-
 	% Input:
 	% params: vector of weights of 2 matrices w1 (weights of connections from
 	%     input layer to hidden layer) and w2 (weights of connections from
@@ -136,14 +132,12 @@ def nnObjFunction(params, *args):
 	%     in the vector represents the truth label of its corresponding image.
 	% lambda: regularization hyper-parameter. This value is used for fixing the
 	%     overfitting problem.
-
 	% Output: 
 	% obj_val: a scalar value representing value of error function
 	% obj_grad: a SINGLE vector of gradient value of error function
 	% NOTE: how to compute obj_grad
 	% Use backpropagation algorithm to compute the gradient of error function
 	% for each weights in weight matrices.
-
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% reshape 'params' vector into 2 matrices of weight w1 and w2
 	% w1: matrix of weights of connections from input layer to hidden layers.
@@ -160,46 +154,44 @@ def nnObjFunction(params, *args):
 	obj_val = 0  
 
 	#Your code here
-
 	#Feedforward Propagation
         
 	hidden_value = np.zeros((np.shape(training_data)[0],n_hidden+1))
 	
 	for j in range(np.shape(training_data)[0]):
-	   for i in range(n_hidden):
-	       for k in range(n_input):
-	           hidden_value[j][i] += w1[i][k]*training_data[j][k]
+		for i in range(n_hidden):
+			for k in range(n_input):
+				hidden_value[j][i] += w1[i][k]*training_data[j][k]
             
 	#hidden_value = np.dot(training_data, w1)
 				
 	#add bias node
 	for i in range (n_hidden):
-	    for j in range (np.shape(training_data)[0]):
-		hidden_value[j][i] += 1 * w1[i][n_input]
+		for j in range (np.shape(training_data)[0]):
+			hidden_value[j][i] += 1 * w1[i][n_input]
 
 	for j in range (np.shape(training_data)[0]):
-            hidden_value[j][n_hidden] = 1
+			hidden_value[j][n_hidden] = 1
 
 	for i in range(n_hidden):
-	   for j in range (np.shape(training_data)[0]):
-		hidden_value[j][i] = sigmoid(hidden_value[j][i])
+		for j in range (np.shape(training_data)[0]):
+			hidden_value[j][i] = sigmoid(hidden_value[j][i])
 
 
 
-	'''output_value = np.zeros((np.shape(training_data)[0],n_class))
-
-	for k in range(np.shape(training_data)[0]):
-	   for i in range(n_class):
-	       for j in range(n_hidden+1):
-	           output_value[k][i] += w2[i][j]*hidden_value[k][j]'''
+	#output_value = np.zeros((np.shape(training_data)[0],n_class))
+	#for k in range(np.shape(training_data)[0]):
+	#   for i in range(n_class):
+	#       for j in range(n_hidden+1):
+	#           output_value[k][i] += w2[i][j]*hidden_value[k][j]
 	
 	#output_value = np.ones((np.shape(training_data)[0], n_class))
 	output_value = np.dot(hidden_value, w2.T)
 	#output_value = np.dot(temp,output_value)  
  
 	for i in range(n_class):
-	    for k in range(np.shape(training_data)[0]):
-		output_value[k][i] = sigmoid(output_value[k][i])
+		for k in range(np.shape(training_data)[0]):
+			output_value[k][i] = sigmoid(output_value[k][i])
 
         # Now we do Error Function to find value of J
 	J = np.zeros(np.shape(training_data)[0])
@@ -207,12 +199,12 @@ def nnObjFunction(params, *args):
 
 	
 	for i in range(np.shape(training_data)[0]):
-	    for l in range(n_class):
-	        J[i] += (-1.0)*(training_label[i][l]*np.log(output_value[i][l])+(1-training_label[i][l])*np.log(1-output_value[i][l]))
+		for l in range(n_class):
+			J[i] += (-1.0)*(training_label[i][l]*np.log(output_value[i][l])+(1-training_label[i][l])*np.log(1-output_value[i][l]))
 	for i in range(np.shape(training_data)[0]):
-	    J_average += J[i]
+		J_average += J[i]
 	J_average = J_average/np.shape(training_data)[0]
-	print J_average
+	print (J_average)
 	# Now compute the derivative of err function from hidden unit to output
 	#computing gradient for each weight and push them into hidden_err
 
@@ -223,81 +215,65 @@ def nnObjFunction(params, *args):
 
 
 	for k in range(np.shape(training_label)[0]):
-	    for l in range(n_class):
-		for j in range(n_hidden+1):
-		    output_err[k][l][j] = (output_value[k][l] - training_label[k][l])*hidden_value[k][j]
+		for l in range(n_class):
+			for j in range(n_hidden+1):
+				output_err[k][l][j] = (output_value[k][l] - training_label[k][l])*hidden_value[k][j]
 
 	# Now compute the derivative of err function from input unit to output
 	hidden_err = np.zeros((np.shape(training_data)[0],n_hidden,n_input+1))
-	'''
-	sigma_output = np.zeros((np.shape(training_label)[0],n_hidden))
-	for k in range(np.shape(training_label)[0]):
-	    for l in range(0,n_class):
-	        for j in range(0,n_hidden):
-	            sigma_output[k][j] += w2[l][j] * (output_value[k][l] - training_label[k][l])
-	'''
- 	'''print(w2)
- 	print(output_value)
-  	print(training_label)
-   	print (sigma_output)'''
-   	train_temp = training_label[:,:n_class]
-   	sigma_output = np.dot((output_value-train_temp),w2)
+	#sigma_output = np.zeros((np.shape(training_label)[0],n_hidden))
+	#for k in range(np.shape(training_label)[0]):
+	#    for l in range(0,n_class):
+	#        for j in range(0,n_hidden):
+	#            sigma_output[k][j] += w2[l][j] * (output_value[k][l] - training_label[k][l])
+	train_temp = training_label[:,:n_class]
+	sigma_output = np.dot((output_value-train_temp),w2)
  	#sigma_output = np.dot(w2,(output_value-training_label))
-   	
-   	for k in range(np.shape(training_data)[0]):
-            for j in range(n_hidden):
-                for i in range(n_input):
-                    hidden_err[k][j][i] = (1 - hidden_value[k][j]) * hidden_value[k][j] * sigma_output[k][j] * training_data[k][i]
-   	'''
-   	print (hidden_err)
-   	print ("hello")   
-   	print (hidden_value)
-   	print ("hello")  
-   	print (sigma_output)
-   	print ("hello")  
-   	print (training_data)
-   	  	   	
-   	for i in range(np.shape(training_data)[0]):
-   	   	temp1 = np.dot((1-hidden_value[i]),hidden_value[i].T)
-   	   	temp2 = np.dot(temp1, sigma_output[i])
-   	   	hidden_err[i] += np.dot(temp2, training_data)
-   	'''
-   	for k in range(np.shape(training_data)[0]):
-   	   	for j in range(n_hidden):
-   	   	   	hidden_err[k][j][n_input] = (1 - hidden_value[k][j]) * hidden_value[k][j] * sigma_output[k][j] * 1
-        
-   	grad_output = np.zeros((n_class,n_hidden+1))
-   	''' 
-   	for k in range(np.shape(training_label)[0]):
-   	   	for l in range(n_class):
-   	   	   	for j in range(n_hidden+1):
-   	   	   	   	grad_output[l][j] += output_err[k][l][j] / np.shape(training_label)[0]
-		    '''
-   	for i in range(np.shape(training_label)[0]):
-   	   	grad_output += np.dot(output_err[i], 1/np.shape(training_label)[0])
+	for k in range(np.shape(training_data)[0]):
+		for j in range(n_hidden):
+			for i in range(n_input):
+				hidden_err[k][j][i] = (1 - hidden_value[k][j]) * hidden_value[k][j] * sigma_output[k][j] * training_data[k][i]
+
+   	#for i in range(np.shape(training_data)[0]):
+   	#   	for j in range(n_hidden):
+    	#  	   	temp1 = np.dot((1-hidden_value[j]),hidden_value[j].T)
+  	#	   	temp2 = np.dot(temp1, sigma_output[j])
+        #   	   	hidden_err[i] = np.dot(temp2, training_data[j])
+
+	for k in range(np.shape(training_data)[0]):
+		for j in range(n_hidden):
+			hidden_err[k][j][n_input] = (1 - hidden_value[k][j]) * hidden_value[k][j] * sigma_output[k][j] * 1
+    
+	grad_output = np.zeros((n_class,n_hidden+1))
+    
+   	#for k in range(np.shape(training_label)[0]):
+   	#   	for l in range(n_class):
+   	#   	   	for j in range(n_hidden+1):
+   	#   	   	   	grad_output[l][j] += output_err[k][l][j] / np.shape(training_label)[0]
+
+	for i in range(np.shape(training_label)[0]):
+		grad_output += np.dot(output_err[i], 1/np.shape(training_label)[0])
     
    	
    	#grad_output = output_err * (1/np.shape(training_label)[0]) 	
    	      
-   	grad_hidden = np.zeros((n_hidden,n_input+1))
-   	'''  
-   	for k in range(np.shape(training_data)[0]):
-   	   	for j in range(n_hidden):
-   	   	   	for i in range(n_input+1):
-   	   	   	   	grad_hidden[j][i] += hidden_err[k][j][i] / np.shape(training_data)[0]
-   	'''  
-   	for i in range(np.shape(training_data)[0]):
-          grad_hidden += np.dot(hidden_err[i], 1/np.shape(training_data)[0])
-   	obj_val = J_average
+	grad_hidden = np.zeros((n_hidden,n_input+1))
+	#for k in range(np.shape(training_data)[0]):
+   	#   	for j in range(n_hidden):
+   	#   	   	for i in range(n_input+1):
+   	#   	   	   	grad_hidden[j][i] += hidden_err[k][j][i] / np.shape(training_data)[0]
+   	
+	for i in range(np.shape(training_data)[0]):
+		grad_hidden += np.dot(hidden_err[i], 1/np.shape(training_data)[0])
+	obj_val = J_average
         
 
 	#Make sure you reshape the gradient matrices to a 1D array. for instance if your gradient matrices are grad_w1 and grad_w2
 	#you would use code similar to the one below to create a flat array
 	#obj_grad = np.concatenate((grad_w1.flatten(), grad_w2.flatten()),0)
-   	obj_grad = np.concatenate((grad_hidden.flatten(),grad_output.flatten()),0)
-   	print obj_grad
+	obj_grad = np.concatenate((grad_hidden.flatten(),grad_output.flatten()),0)
 
-   	return (obj_val,obj_grad)
+	return (obj_val,obj_grad)
 
 
 
@@ -307,7 +283,6 @@ def nnPredict(w1,w2,data):
 
 	"""% nnPredict predicts the label of data given the parameter w1, w2 of Neural
 	% Network.
-
 	% Input:
 	% w1: matrix of weights of connections from input layer to hidden layers.
 	%     w1(i, j) represents the weight of connection from unit i in input 
@@ -317,7 +292,6 @@ def nnPredict(w1,w2,data):
 	%     layer to unit j in hidden layer.
 	% data: matrix of data. Each row of this matrix represents the feature 
 	%       vector of a particular image
-
 	% Output: 
 	% label: a column vector of predicted labels""" 
 
@@ -351,7 +325,7 @@ train_data, train_label, validation_data,validation_label, test_data, test_label
 n_input = train_data.shape[1]; 
 
 # set the number of nodes in hidden unit (not including bias unit)
-n_hidden = 50;
+n_hidden = 20;
 
 # set the number of nodes in output unit
 n_class = 10;				   
@@ -364,7 +338,7 @@ initial_w2 = initializeWeights(n_hidden, n_class);
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()),0)
 
 # set the regularization hyper-parameter
-lambdaval = 0;
+lambdaval = 0.3;
 
 
 args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
